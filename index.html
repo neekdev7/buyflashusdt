@@ -122,7 +122,6 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        /* Mobile-optimized modal */
         .modal-mobile {
             position: fixed;
             bottom: 0;
@@ -149,6 +148,16 @@
                 border-radius: 20px 20px 0 0;
             }
         }
+        .platform-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin: 2px;
+        }
     </style>
 </head>
 <body class="gradient-bg min-h-screen">
@@ -171,7 +180,7 @@
                 </div>
             </div>
             
-            <div class="glass-effect rounded-2xl p-5 mb-5">
+            <div class="glass-effect rounded-2xl p-5 mb-4">
                 <div class="flex justify-between items-center">
                     <div>
                         <p class="text-sm text-gray-400 mb-1">Total Reserved</p>
@@ -179,12 +188,30 @@
                         <p class="text-xs text-gray-500 mt-1">Flash USDT</p>
                     </div>
                     <div class="text-right">
-                        <div class="bg-green-900/30 text-green-400 px-3 py-1 rounded-full text-xs font-medium mb-2">
-                            <i class="fas fa-arrow-up mr-1"></i>
-                            +2.5%
+                        <div id="changeIndicator" class="text-xs font-medium mb-2 px-2 py-1 rounded-full">
+                            <!-- Change indicator will be added here -->
                         </div>
-                        <p class="text-xs text-gray-500">24h Change</p>
+                        <p class="text-xs text-gray-500">10m Update</p>
                     </div>
+                </div>
+            </div>
+            
+            <!-- Flash USDT Validity Info -->
+            <div class="glass-effect rounded-2xl p-4 mb-4">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center">
+                        <i class="fas fa-shield-alt text-green-400 mr-2"></i>
+                        <span class="text-sm font-medium text-white">Valid for 365 Days</span>
+                    </div>
+                    <i class="fas fa-check-circle text-green-400"></i>
+                </div>
+                <p class="text-xs text-gray-400 mb-3">Accepted on all platforms:</p>
+                <div class="flex flex-wrap">
+                    <span class="platform-badge"><i class="fas fa-chart-line mr-1"></i>Trading</span>
+                    <span class="platform-badge"><i class="fas fa-gamepad mr-1"></i>Gaming</span>
+                    <span class="platform-badge"><i class="fas fa-exchange-alt mr-1"></i>DEX</span>
+                    <span class="platform-badge"><i class="fas fa-coins mr-1"></i>Forex</span>
+                    <span class="platform-badge"><i class="fas fa-ellipsis-h mr-1"></i>More</span>
                 </div>
             </div>
             
@@ -261,11 +288,11 @@
                 <div class="flex items-center justify-between mb-5">
                     <h2 class="text-xl font-bold text-white flex items-center">
                         <i class="fas fa-history text-blue-400 mr-2"></i>
-                        Live Transactions
+                        Recent Transactions
                     </h2>
                     <div class="flex items-center space-x-1">
                         <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                        <span class="text-xs text-gray-400">Live</span>
+                        <span class="text-xs text-gray-400">5m Update</span>
                     </div>
                 </div>
                 <div id="transactionsList" class="space-y-3">
@@ -388,6 +415,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Elements
             const totalReservedEl = document.getElementById('totalReserved');
+            const changeIndicatorEl = document.getElementById('changeIndicator');
             const buyForm = document.getElementById('buyForm');
             const amountInput = document.getElementById('amount');
             const totalCostEl = document.getElementById('totalCost');
@@ -418,27 +446,31 @@
             let paymentStartTime = null;
             let countdownInterval = null;
             
-            // Pool of USDT addresses for transactions
-            const addressPool = [
-                'TMy5cLdGz3G8HrWG1yndLagH1w7tQQCN7p',
-                'TQn9Y2khN7y8XJ3L4K5M6P7Q8R9S0T1U2',
-                'TA3B4C5D6E7F8G9H0I1J2K3L4M5N6O7P8',
-                'TR9S8T7U6V5W4X3Y2Z1A2B3C4D5E6F7G8',
-                'TN1M2N3O4P5Q6R7S8T9U0V1W2X3Y4Z5A6',
-                'TX7Y6Z5A4B3C2D1E0F9G8H7I6J5K4L3M2',
-                'TP8O9N0M1L2K3J4I5H6G7F8E9D0C1B2A3',
-                'TZ4A3B2C1D0E9F8G7H6I5J4K3L2M1N0O9',
-                'TY5B6C7D8E9F0G1H2I3J4K5L6M7N8O9P0',
-                'TW1P2O3N4M5L6K7J8I9H0G1F2E3D4C5B6'
-            ];
-            
-            // Update total reserved every second
+            // Update total reserved every 10 minutes with drop/fill simulation
             let totalReserved = 74132154.310147;
-            setInterval(() => {
-                const change = (Math.random() - 0.5) * 100;
+            function updateTotalReserved() {
+                // Simulate significant changes (drops and fills)
+                const changeType = Math.random() > 0.5 ? 'fill' : 'drop';
+                const maxChange = 50000; // Maximum change amount
+                const change = (Math.random() * maxChange) * (changeType === 'drop' ? -1 : 1);
+                
                 totalReserved += change;
                 totalReservedEl.textContent = totalReserved.toLocaleString('en-US', { minimumFractionDigits: 6, maximumFractionDigits: 6 });
-            }, 1000);
+                
+                // Update change indicator
+                const changePercent = ((change / totalReserved) * 100).toFixed(2);
+                changeIndicatorEl.innerHTML = `
+                    <i class="fas fa-arrow-${changeType === 'drop' ? 'down' : 'up'} mr-1"></i>
+                    ${Math.abs(changePercent)}%
+                `;
+                changeIndicatorEl.className = `text-xs font-medium mb-2 px-2 py-1 rounded-full ${
+                    changeType === 'drop' ? 'bg-red-900/30 text-red-400' : 'bg-green-900/30 text-green-400'
+                }`;
+            }
+            
+            // Initial update and set interval for 10 minutes
+            updateTotalReserved();
+            setInterval(updateTotalReserved, 600000); // 10 minutes
             
             // Calculate total cost when amount changes
             amountInput.addEventListener('input', function() {
@@ -595,17 +627,23 @@
                 cancelPayment();
             });
             
-            // Generate fake transactions with random addresses
+            // Generate fake transactions with TXN ID and amount
             function generateFakeTransactions() {
                 const transactions = [];
                 
                 for (let i = 0; i < 5; i++) {
-                    // Pick a random address from the pool
-                    const address = addressPool[Math.floor(Math.random() * addressPool.length)];
-                    const block = Math.floor(Math.random() * 1000000);
+                    // Generate random TXN ID (like a hash)
+                    const txnId = '0x' + Array.from({length: 8}, () => Math.floor(Math.random() * 16).toString(16)).join('') + 
+                                  '...' + 
+                                  Array.from({length: 8}, () => Math.floor(Math.random() * 16).toString(16)).join('');
+                    
+                    // Generate random amount between 1000 and 50000
+                    const amount = Math.floor(Math.random() * 49000) + 1000;
+                    
+                    // Generate random time within the last hour
                     const time = new Date(Date.now() - Math.floor(Math.random() * 3600000)).toLocaleTimeString();
                     
-                    transactions.push({ address, block, time });
+                    transactions.push({ txnId, amount, time });
                 }
                 
                 return transactions;
@@ -620,26 +658,20 @@
                     txEl.className = 'transaction-card glass-effect rounded-xl p-4 border border-gray-700';
                     txEl.style.animationDelay = `${index * 0.1}s`;
                     
-                    // Truncate address for display
-                    const truncatedAddress = tx.address.substring(0, 8) + '...' + tx.address.substring(tx.address.length - 8);
-                    
                     txEl.innerHTML = `
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center mr-3">
-                                    <i class="fas fa-link text-white text-sm"></i>
+                                    <i class="fas fa-receipt text-white text-sm"></i>
                                 </div>
                                 <div>
-                                    <p class="font-medium font-mono text-sm text-white">${truncatedAddress}</p>
-                                    <p class="text-xs text-gray-500">Block: ${tx.block}</p>
+                                    <p class="font-medium font-mono text-xs text-white">${tx.txnId}</p>
+                                    <p class="text-xs text-gray-500">${tx.time}</p>
                                 </div>
                             </div>
                             <div class="text-right">
-                                <p class="text-xs text-gray-400">${tx.time}</p>
-                                <div class="flex items-center mt-1">
-                                    <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-1"></div>
-                                    <span class="text-xs text-green-400">Confirmed</span>
-                                </div>
+                                <p class="font-bold text-purple-400">${tx.amount.toLocaleString()}</p>
+                                <p class="text-xs text-gray-500">Flash USDT</p>
                             </div>
                         </div>
                     `;
@@ -647,9 +679,9 @@
                 });
             }
             
-            // Initial display and update every 3 seconds
+            // Initial display and update every 5 minutes
             displayTransactions();
-            setInterval(displayTransactions, 3000);
+            setInterval(displayTransactions, 300000); // 5 minutes
         });
     </script>
 </body>
