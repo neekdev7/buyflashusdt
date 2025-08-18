@@ -88,10 +88,27 @@
         .special-offer {
             background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
             animation: glow 2s ease-in-out infinite alternate;
+            position: relative;
+            overflow: hidden;
+        }
+        .special-offer::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
         }
         @keyframes glow {
-            from { box-shadow: 0 0 10px rgba(245, 158, 11, 0.5); }
-            to { box-shadow: 0 0 20px rgba(245, 158, 11, 0.8); }
+            from { box-shadow: 0 0 20px rgba(245, 158, 11, 0.5), 0 0 40px rgba(239, 68, 68, 0.3); }
+            to { box-shadow: 0 0 30px rgba(245, 158, 11, 0.8), 0 0 60px rgba(239, 68, 68, 0.5); }
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
         .countdown-warning {
             animation: blink 1s ease-in-out infinite;
@@ -158,6 +175,60 @@
             font-size: 11px;
             margin: 2px;
         }
+        .currency-selector {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 4px;
+        }
+        .currency-option {
+            flex: 1;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .currency-option.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .currency-option:not(.active) {
+            color: #9ca3af;
+        }
+        .currency-option:not(.active):hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .special-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 12px;
+            animation: pulse-badge 2s infinite;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+        }
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .telegram-btn {
+            background: #0088cc;
+            transition: all 0.3s ease;
+        }
+        .telegram-btn:hover {
+            background: #0077b3;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 136, 204, 0.4);
+        }
     </style>
 </head>
 <body class="gradient-bg min-h-screen">
@@ -191,7 +262,7 @@
                         <div id="changeIndicator" class="text-xs font-medium mb-2 px-2 py-1 rounded-full">
                             <!-- Change indicator will be added here -->
                         </div>
-                        <p class="text-xs text-gray-500">.</p>
+                        <p class="text-xs text-gray-500"></p>
                     </div>
                 </div>
             </div>
@@ -215,14 +286,21 @@
                 </div>
             </div>
             
-            <div class="special-offer rounded-2xl p-5 text-white">
+            <div class="special-offer rounded-2xl p-5 text-white relative">
+                <div class="special-badge">HOT DEAL</div>
                 <div class="flex items-center justify-between">
-                    <div>
+                    <div class="pr-16">
                         <p class="text-lg font-bold mb-1">🔥 Special Offer</p>
-                        <p class="text-sm opacity-90">0.003 USDT per Flash USDT</p>
-                        <p class="text-xs opacity-75 mt-1">Limited Time Only</p>
+                        <p class="text-2xl font-bold mb-1">10K Flash USDT</p>
+                        <p class="text-xl opacity-90">at 2K INR only</p>
+                        <p class="text-xs opacity-75 mt-1">Limited Time Offer • Contact Support</p>
                     </div>
-                    <i class="fas fa-fire text-3xl text-white/80"></i>
+                    <div class="text-right flex-shrink-0">
+                        <div class="text-4xl mb-2">💰</div>
+                        <div class="bg-white/20 px-3 py-1 rounded-full text-xs font-bold">
+                            SAVE 50%
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
@@ -239,6 +317,20 @@
                     <span class="text-xs bg-purple-900/30 text-purple-400 px-2 py-1 rounded-full">Instant</span>
                 </div>
                 
+                <!-- Currency Selector -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Select Currency</label>
+                    <div class="currency-selector">
+                        <div class="currency-option" data-currency="usdt">
+                            <i class="fas fa-dollar-sign mr-1"></i> USDT
+                        </div>
+                        <div class="currency-option active" data-currency="inr">
+                            <i class="fas fa-rupee-sign mr-1"></i> INR
+                            <span class="special-badge ml-1">BEST</span>
+                        </div>
+                    </div>
+                </div>
+                
                 <form id="buyForm" class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
@@ -248,7 +340,7 @@
                         </div>
                     </div>
                     
-                    <div>
+                    <div id="usdtAddressField">
                         <label class="block text-sm font-medium text-gray-300 mb-2">USDT TRC20 Address</label>
                         <div class="relative">
                             <i class="fas fa-wallet absolute left-3 top-3.5 text-gray-500"></i>
@@ -260,27 +352,60 @@
                         <label class="block text-sm font-medium text-gray-300 mb-2">Amount (Flash USDT)</label>
                         <div class="relative">
                             <i class="fas fa-coins absolute left-3 top-3.5 text-gray-500"></i>
-                            <input type="number" id="amount" min="2500" step="0.000001" required class="input-field w-full pl-10 pr-4 py-3 rounded-lg text-white placeholder-gray-500 focus:outline-none" placeholder="2500">
+                            <input type="number" id="amount" min="2500" step="0.000001" value="10000" required class="input-field w-full pl-10 pr-4 py-3 rounded-lg text-white placeholder-gray-500 focus:outline-none" placeholder="2500">
                         </div>
                         <p class="text-xs text-gray-500 mt-1">Minimum: 2,500 Flash USDT</p>
+                        <div class="mt-2 p-2 bg-orange-900/20 border border-orange-800/50 rounded-lg">
+                            <p class="text-xs text-orange-400">
+                                <i class="fas fa-gift mr-1"></i>
+                                Special Offer: 10,000 Flash USDT for ₹2,000 only!
+                            </p>
+                        </div>
                     </div>
                     
                     <div class="glass-effect rounded-xl p-4">
                         <div class="flex justify-between mb-2">
                             <span class="text-sm text-gray-400">Price per Flash USDT:</span>
-                            <span class="font-semibold text-yellow-400" id="pricePerUnit">0.003 USDT</span>
+                            <span class="font-semibold text-yellow-400" id="pricePerUnit">₹0.200 INR</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-sm text-gray-400">Total Cost:</span>
-                            <span class="font-bold text-xl text-purple-400" id="totalCost">0 USDT</span>
+                            <span class="font-bold text-xl text-purple-400" id="totalCost">₹2,000 INR</span>
+                        </div>
+                        <div class="mt-2 text-xs text-green-400">
+                            <i class="fas fa-check-circle mr-1"></i>
+                            Special offer applied - You save 50%!
                         </div>
                     </div>
                     
-                    <button type="submit" class="btn-primary w-full text-white font-bold py-3.5 rounded-lg flex items-center justify-center space-x-2">
-                        <i class="fas fa-bolt"></i>
-                        <span>Buy Flash USDT</span>
+                    <button type="submit" id="buyButton" class="btn-primary w-full text-white font-bold py-3.5 rounded-lg flex items-center justify-center space-x-2">
+                        <i class="fas fa-headset"></i>
+                        <span>Contact Support for INR Deal</span>
                     </button>
                 </form>
+                
+                <!-- INR Support Section -->
+                <div id="inrSupportSection" class="mt-6 p-4 bg-orange-900/20 border border-orange-800/50 rounded-xl">
+                    <div class="flex items-center mb-3">
+                        <i class="fas fa-headset text-orange-400 mr-2"></i>
+                        <h3 class="text-sm font-bold text-white">INR Purchase Support</h3>
+                    </div>
+                    <p class="text-xs text-gray-300 mb-4">For INR purchases, please contact our support team for assistance with payment methods and verification.</p>
+                    <div class="space-y-2">
+                        <a href="https://t.me/devtech77?text=Hi%2C%20I%20want%20to%20buy%2010K%20Flash%20USDT%20for%202K%20INR" target="_blank" class="flex items-center justify-center w-full telegram-btn text-white text-sm font-medium py-2.5 rounded-lg transition">
+                            <i class="fab fa-telegram-plane mr-2"></i>
+                            Telegram Support
+                        </a>
+                        <a href="#" class="flex items-center justify-center w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2.5 rounded-lg transition">
+                            <i class="fas fa-phone mr-2"></i>
+                            Call Support
+                        </a>
+                        <a href="mailto:support@flashusdt.com?subject=10K%20Flash%20USDT%20for%202K%20INR%20Offer" class="flex items-center justify-center w-full bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium py-2.5 rounded-lg transition">
+                            <i class="fas fa-envelope mr-2"></i>
+                            Email Support
+                        </a>
+                    </div>
+                </div>
             </section>
 
             <!-- Recent Transactions -->
@@ -292,7 +417,7 @@
                     </h2>
                     <div class="flex items-center space-x-1">
                         <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                        <span class="text-xs text-gray-400">Live</span>
+                        <span class="text-xs text-gray-400">5m Update</span>
                     </div>
                 </div>
                 <div id="transactionsList" class="space-y-3">
@@ -323,9 +448,9 @@
             </div>
         </footer>
 
-        <!-- WhatsApp Support -->
-        <a href="https://wa.me/+919101760820" target="_blank" class="fixed bottom-20 right-4 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition transform hover:scale-110 z-10">
-            <i class="fab fa-whatsapp text-xl"></i>
+        <!-- Telegram Support -->
+        <a href="https://t.me/devtech77" target="_blank" class="fixed bottom-20 right-4 telegram-btn text-white p-4 rounded-full shadow-lg transition transform hover:scale-110 z-10">
+            <i class="fab fa-telegram-plane text-xl"></i>
         </a>
 
         <!-- Payment Modal -->
@@ -374,7 +499,7 @@
                         </div>
                     </div>
                     
-                    <p class="text-xs text-gray-400">Scan with your USDT (TRC20) wallet</p>
+                    <p class="text-xs text-gray-400">Scan with your TRON wallet</p>
                 </div>
                 
                 <div class="bg-red-900/20 border border-red-800/50 rounded-xl p-3 mb-4">
@@ -435,11 +560,19 @@
             const transactionsList = document.getElementById('transactionsList');
             const countdownEl = document.getElementById('countdown');
             const progressBarEl = document.getElementById('progressBar');
+            const currencyOptions = document.querySelectorAll('.currency-option');
+            const usdtAddressField = document.getElementById('usdtAddressField');
+            const inrSupportSection = document.getElementById('inrSupportSection');
+            const buyButton = document.getElementById('buyButton');
             
             // Constants
             const specialRate = 0.003;
+            const inrRate = 0.20; // Special offer rate: 2000 INR for 10000 Flash USDT = 0.20 INR per Flash USDT
             const depositAddress = "TMy5cLdGz3G8HrWG1yndLagH1w7tQQCN7p";
             const PAYMENT_TIMEOUT = 60 * 60 * 1000; // 60 minutes in milliseconds
+            
+            // State
+            let selectedCurrency = 'inr'; // Default to INR for special offer
             
             // Timer variables
             let paymentTimer = null;
@@ -472,16 +605,67 @@
             updateTotalReserved();
             setInterval(updateTotalReserved, 600000); // 10 minutes
             
-            // Calculate total cost when amount changes
-            amountInput.addEventListener('input', function() {
-                const amount = parseFloat(this.value) || 0;
-                const total = amount * specialRate;
-                totalCostEl.textContent = `${total.toFixed(6)} USDT`;
+            // Currency selector functionality
+            currencyOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove active class from all options
+                    currencyOptions.forEach(opt => opt.classList.remove('active'));
+                    // Add active class to clicked option
+                    this.classList.add('active');
+                    
+                    selectedCurrency = this.dataset.currency;
+                    updateCurrencyUI();
+                });
             });
+            
+            // Update UI based on selected currency
+            function updateCurrencyUI() {
+                if (selectedCurrency === 'usdt') {
+                    usdtAddressField.classList.remove('hidden');
+                    inrSupportSection.classList.add('hidden');
+                    buyButton.innerHTML = '<i class="fas fa-bolt mr-2"></i><span>Buy Flash USDT</span>';
+                    buyButton.disabled = false;
+                    amountInput.value = '2500'; // Reset to minimum for USDT
+                } else {
+                    usdtAddressField.classList.add('hidden');
+                    inrSupportSection.classList.remove('hidden');
+                    buyButton.innerHTML = '<i class="fas fa-headset mr-2"></i><span>Contact Support for INR Deal</span>';
+                    buyButton.disabled = true;
+                    amountInput.value = '10000'; // Set to special offer amount
+                }
+                updatePriceCalculation();
+            }
+            
+            // Update price calculation based on currency
+            function updatePriceCalculation() {
+                const amount = parseFloat(amountInput.value) || 0;
+                let total, rate, currencySymbol;
+                
+                if (selectedCurrency === 'usdt') {
+                    rate = specialRate;
+                    currencySymbol = 'USDT';
+                } else {
+                    rate = inrRate;
+                    currencySymbol = 'INR';
+                }
+                
+                total = amount * rate;
+                pricePerUnitEl.textContent = `${currencySymbol === 'INR' ? '₹' : ''}${rate.toFixed(3)} ${currencySymbol}`;
+                totalCostEl.textContent = `${currencySymbol === 'INR' ? '₹' : ''}${total.toFixed(2)} ${currencySymbol}`;
+            }
+            
+            // Calculate total cost when amount changes
+            amountInput.addEventListener('input', updatePriceCalculation);
             
             // Handle form submission
             buyForm.addEventListener('submit', function(e) {
                 e.preventDefault();
+                if (selectedCurrency === 'inr') {
+                    // For INR, show support contact instead of payment modal
+                    inrSupportSection.scrollIntoView({ behavior: 'smooth' });
+                    return;
+                }
+                
                 const amount = parseFloat(amountInput.value);
                 const total = amount * specialRate;
                 showPaymentModal(total);
@@ -678,6 +862,9 @@
                     transactionsList.appendChild(txEl);
                 });
             }
+            
+            // Initialize with INR selected
+            updateCurrencyUI();
             
             // Initial display and update every 5 minutes
             displayTransactions();
